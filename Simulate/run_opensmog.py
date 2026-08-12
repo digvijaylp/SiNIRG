@@ -1,8 +1,12 @@
+
 from OpenSMOG import SBM
 import argparse
 
-# input argument flags 
+"""
+Script for performing CA-SBM simulations on OpenSMOG 
 
+"""
+# input argument flags 
 # neccessary input arguments: -g, -p, -x, below
 parser=argparse.ArgumentParser()
 parser.add_argument("-g","-gro",type=str,help="Input structure GRO file.")
@@ -10,15 +14,26 @@ parser.add_argument("-p","-top",type=str,help="Input forcefield TOP file.")
 parser.add_argument("-x","-xml",type=str,help="Input forcefield XML file.")
 
 # optional input arguments below
-parser.add_argument("-o","-out",type=str,help="Output folder name. Default = Out_01",default="Out_01")
-parser.add_argument("-tempk",type=float,help="Simulation temperature in in K. Default = None")
-parser.add_argument("-temp",type=float,help="Simulation temperature in reduced units. Default = 1 RU",default=1.00)
-parser.add_argument("-steps",type=int,help="Number of simulation steps. Default=100000000 steps",default=100000000)
-parser.add_argument("-dt","-step",type=float,help="Simulation step size in reduced units or (ps). Default = 0.0005 RU",default=0.0005)
-parser.add_argument("-rt","-report",type=int,help="Reporting interval. Default = 2000",default=2000)
-parser.add_argument("-rc","-rcut",type=float,help="r_cutoff. Default = 0.0005 nm",default=3.0)
-parser.add_argument("-cr","-collisionrate",type=float,help="Collision rate. Default = 1.0",default=1.0)
-parser.add_argument("-op","-platform",type=str,help="OpenMM Simulation Platform",default="cuda")
+parser.add_argument("-o","-out",type=str,
+            help="Output folder name. Default = Out_01",
+            default="Output_01")
+parser.add_argument("-temp",type=float,
+            help="Simulation temperature in reduced units. Default = 1 RU",
+            default=1.00)
+parser.add_argument("-steps",type=int,
+            help="Number of simulation steps. Default=100000000 steps", 
+            default=100000000)
+parser.add_argument("-dt","-step",type=float,
+          help="Simulation step size in reduced units. Default = 0.0005 RU",
+          default=0.0005)
+parser.add_argument("-rt","-report",type=int,
+            help="Reporting interval. Default = 2000",default=2000)
+parser.add_argument("-rc","-rcut",type=float,
+            help="r_cutoff. Default = 0.0005 nm",default=3.0)
+parser.add_argument("-cr","-collisionrate",type=float,
+            help="Collision rate. Default = 1.0",default=1.0)
+parser.add_argument("-op","-platform",type=str,
+            help="OpenMM Simulation Platform",default="cuda")
 args=parser.parse_args()
 
 # OpenSMOG simulation parameters
@@ -28,9 +43,6 @@ dt=args.dt              # stepsize in redeuced time units (ps)
 collision_rate=args.cr  # collision rate in inverse time units (ps-1)
 r_cutoff=args.rc        # nonbond cutoff in nm
 T=args.temp             # temperature reduced units
-if args.tempk is not None:
-    T_in_K=args.tempk           # temperature in Kelvin
-    T=float(T_in_K)*0.008314    #reduced units RT
 
 # creating SBM object with the above parameters
 sbm_CA = SBM(name=simul_prefix, time_step=dt, collision_rate=collision_rate,
@@ -71,4 +83,5 @@ sbm_CA.run(nsteps=nsteps, report=True, interval=report_interval)
 # saving the final state and checkpoint files
 sbm_CA.simulation.saveState("%s/endfile.state"%outputdir)
 sbm_CA.simulation.saveCheckpoint("%s/endfile.chk"%outputdir)
+
 
