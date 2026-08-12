@@ -1,2 +1,2 @@
-# SiNIRG
-Scripts for Implementing Simulations with Non-Interacting Replicas on OpenMM/OpenSMOG
+# SiNIR-G: Simulating Non-Interacting Replicas on GPUs
+Eaxmple scripts for implementing simulations with Non-Interacting Replicas (NIR) on OpenMM/OpenSMOG
